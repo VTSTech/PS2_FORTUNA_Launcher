@@ -89,6 +89,17 @@ u64 CurrTime;
 u64 init_delay_start;
 u64 timeout_start;
 
+void banner()
+{
+	scr_clear();
+  sleep(1);
+  scr_printf("============================================= \n");
+  scr_printf("==FORTUNA Homebrew Launcher===12.06.2019===== \n");
+  scr_printf("==v0.4 Written by VTSTech of PSX-Place.com=== \n");
+  scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
+  scr_printf("==www.vts-tech.org=========================== \n\n");	
+}
+
 int main(int argc, char *argv[], char **envp)
 {
 	char *target, *path;
@@ -96,13 +107,7 @@ int main(int argc, char *argv[], char **envp)
 	char folder[50];
  	SifInitRpc(0);
 	init_scr();
-	sleep(1);
-	scr_clear();
-  scr_printf("============================================= \n");
-  scr_printf("==FORTUNA Homebrew Launcher===12.05.2019===== \n");
-  scr_printf("==v0.4 Written by VTSTech of PSX-Place.com=== \n");
-  scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
-  scr_printf("==www.vts-tech.org=========================== \n\n");
+	banner();
 	SifLoadModule("rom0:SIO2MAN", 0, NULL);
 	SifLoadModule("rom0:MCMAN", 0, NULL);
 	SifLoadModule("rom0:MCSERV", 0, NULL);
@@ -252,13 +257,7 @@ int main(int argc, char *argv[], char **envp)
 				} //devshown,devset,menushown							 
 			}// state,cdstatus										
 			if (menushown == 0 && devset == 1) {
-				scr_clear();
-			  sleep(1);
-			  scr_printf("============================================= \n");
-			  scr_printf("==FORTUNA Homebrew Launcher===12.05.2019===== \n");
-			  scr_printf("==v0.4 Written by VTSTech of PSX-Place.com=== \n");
-			  scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
-			  scr_printf("==www.vts-tech.org=========================== \n\n");
+				banner();
 				scr_printf("Device: %s Folder: %s \n", device, folder);
 				scr_printf(" \n *  X  * Run wLaunchElf v4.43a Build: 8d4a0c2 Date: 03.30.2019");
 				scr_printf(" \n *  O  * Run OPL Open PS2 Loader v0.9.3 r1650 Build: 23e844a Date: 11.02.2019");
