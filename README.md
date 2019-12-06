@@ -36,6 +36,13 @@ mass:/FORTUNA/GSM.ELF
 mc0:/APPS/GSM.ELF
 mass:/APPS/GSM.ELF
 
+ESR
+
+mc0:/FORTUNA/ESR.ELF
+mass:/FORTUNA/ESR.ELF
+mc0:/APPS/ESR.ELF
+mass:/APPS/ESR.ELF
+
 RetroArch
 
 mc0:/FORTUNA/retroarchps2_2048.elf
