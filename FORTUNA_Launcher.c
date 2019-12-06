@@ -1,6 +1,6 @@
 //Working Title: 'FORTUNA' Homebrew Launcher
 //Written by VTSTech (veritas@vts-tech.org)
-//Version: 0.1
+//Version: 0.4
 
 #include <debug.h>
 #include <iopcontrol.h>
@@ -91,19 +91,16 @@ u64 timeout_start;
 
 int main(int argc, char *argv[], char **envp)
 {
-	char cwd[FILENAME_MAX];
 	char *target, *path;
 	char device[50];
 	char folder[50];
-	//char ELF_Name[50];
-  //int TrayCheck;
  	SifInitRpc(0);
 	init_scr();
 	sleep(1);
 	scr_clear();
   scr_printf("============================================= \n");
   scr_printf("==FORTUNA Homebrew Launcher===12.05.2019===== \n");
-  scr_printf("==v0.3 Written by VTSTech of PSX-Place.com=== \n");
+  scr_printf("==v0.4 Written by VTSTech of PSX-Place.com=== \n");
   scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
   scr_printf("==www.vts-tech.org=========================== \n\n");
 	SifLoadModule("rom0:SIO2MAN", 0, NULL);
@@ -111,12 +108,9 @@ int main(int argc, char *argv[], char **envp)
 	SifLoadModule("rom0:MCSERV", 0, NULL);
 	SifLoadModule("rom0:PADMAN", 0, NULL);
 	sbv_patch_disable_prefix_check();
-	scr_printf("getcwd(): %s \n",getcwd(cwd,sizeof(cwd)));
 	path="";
 	strcpy(device,"mc0:");
 	strcpy(folder,"/FORTUNA/");
-	//strcat(path,device);
-	//strcat(path,folder);
 	setupPad();
 	WaitTime = Timer();
 	int state = padGetState(0,0);
@@ -124,12 +118,7 @@ int main(int argc, char *argv[], char **envp)
 	int devshown = 0;
 	int devset = 0;
 	int menushown = 0;
-	//int reqstate = padGetReqState(0,0);
-	//scr_printf("padGetReqState(): %d\n",reqstate);
-	//scr_printf("padGetState(): %d\n",state);
-	//scr_printf("Debug: %s \n",path);
 	sleep(1);
-	scr_printf("padGetState(): %d\n",state);
 	if (state == 6) {
 		//SEL = 1
 		//L3  = 2
@@ -227,6 +216,14 @@ int main(int argc, char *argv[], char **envp)
 						scr_printf(" \nPreparing to run RetroArch FCEUmm Core v1.8.1 (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
+					} else if (new_pad == 16) {
+						target = device;
+						strcat(target,folder);
+						path = target;
+						strcat(target,"ESR.ELF");
+						scr_printf(" \nPreparing to run ESR r9b (%s) ... \n", target);
+						sleep(1);
+						LoadElf(target,path);
 					} else if (new_pad == 8) {
 						target = device;
 						strcat(target,folder);
@@ -259,12 +256,12 @@ int main(int argc, char *argv[], char **envp)
 			  sleep(1);
 			  scr_printf("============================================= \n");
 			  scr_printf("==FORTUNA Homebrew Launcher===12.05.2019===== \n");
-			  scr_printf("==v0.3 Written by VTSTech of PSX-Place.com=== \n");
+			  scr_printf("==v0.4 Written by VTSTech of PSX-Place.com=== \n");
 			  scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
 			  scr_printf("==www.vts-tech.org=========================== \n\n");
 				scr_printf("Device: %s Folder: %s \n", device, folder);
 				scr_printf(" \n *  X  * Run wLaunchElf v4.43a Build: 8d4a0c2 Date: 03.30.2019");
-				scr_printf(" \n *  O  * Run OPL Open PS2 Loader v0.9.3 Build: r1641 Date: 11.02.2019");
+				scr_printf(" \n *  O  * Run OPL Open PS2 Loader v0.9.3 r1650 Build: 23e844a Date: 11.02.2019");
 				scr_printf(" \n *  /\\ * Run GSM v0.3.8 Build: N/A Date: 01.14.2016");
 				scr_printf(" \n * SQU * Run SNESStation v0.2.6c Build: N/A Date: 11.22.2016");
 				scr_printf(" \n * L1 * Run RetroArch 2048 v1.8.1 Build: bfdc8e6 Date: 11.15.2019");
@@ -272,9 +269,10 @@ int main(int argc, char *argv[], char **envp)
 				scr_printf(" \n * L3 * Run RetroArch mGBA v1.8.1 Build: bfdc8e6 Date: 11.15.2019");
 				scr_printf(" \n * R1 * Run RetroArch PicoDrive v1.8.1 Build: bfdc8e6 Date: 11.15.2019");		
 				scr_printf(" \n * R2 * Run RetroArch QuickNES v1.8.1 Build: bfdc8e6 Date: 11.15.2019");		
-				scr_printf(" \n * R3 * Run PS2Ident v0.835 Build: N/A Date: 11.08.2019");		
+				scr_printf(" \n * R3 * Run PS2Ident v0.835 Build: N/A Date: 11.08.2019");
+				scr_printf(" \n * UP * Run ESR r9b Build: N/A Date: 09.05.2008");
 				scr_printf(" \n \nPush START to exit. \n");
-				scr_printf(" \n \nController ready. Waiting for input... \n");
+				//scr_printf(" \n \nController ready. Waiting for input... \n");
 				menushown = 1;
 			}		
 			if (devshown == 1 && devset == 0) {							
