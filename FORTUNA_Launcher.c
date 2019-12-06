@@ -1,6 +1,6 @@
 //Working Title: 'FORTUNA' Homebrew Launcher
 //Written by VTSTech (veritas@vts-tech.org)
-//Version: 0.4
+//Version: 0.41
 
 #include <debug.h>
 #include <iopcontrol.h>
@@ -95,7 +95,7 @@ void banner()
   sleep(1);
   scr_printf("============================================= \n");
   scr_printf("==FORTUNA Homebrew Launcher===12.06.2019===== \n");
-  scr_printf("==v0.4 Written by VTSTech of PSX-Place.com=== \n");
+  scr_printf("==v0.41 Written by VTSTech of PSX-Place.com== \n");
   scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
   scr_printf("==www.vts-tech.org=========================== \n\n");	
 }
@@ -148,10 +148,10 @@ int main(int argc, char *argv[], char **envp)
 			state = readpad();
 			//CdStatus = sceCdStatus();
 			if (devshown == 0 && menushown == 0) {
-				scr_printf(" \n *  X  * Use Device: mc0 and Folder: FORTUNA \n");
-				scr_printf(" \n *  O  * Use Device: mass and Folder: FORTUNA \n");
-				scr_printf(" \n *  /\\ * Use Device: mc0 and Folder: APPS \n");
-				scr_printf(" \n * SQU * Use Device: mass and Folder: APPS \n");
+				scr_printf(" \n *  X * Use Device: mc0 and Folder: FORTUNA \n");
+				scr_printf(" \n *  O * Use Device: mass and Folder: FORTUNA \n");
+				scr_printf(" \n * /\\ * Use Device: mc0 and Folder: APPS \n");
+				scr_printf(" \n * [] * Use Device: mass and Folder: APPS \n");
 				devshown = 1;
 			}							
 			if (state != 1) {
@@ -259,10 +259,10 @@ int main(int argc, char *argv[], char **envp)
 			if (menushown == 0 && devset == 1) {
 				banner();
 				scr_printf("Device: %s Folder: %s \n", device, folder);
-				scr_printf(" \n *  X  * Run wLaunchElf v4.43a Build: 8d4a0c2 Date: 03.30.2019");
-				scr_printf(" \n *  O  * Run OPL Open PS2 Loader v0.9.3 r1650 Build: 23e844a Date: 11.02.2019");
-				scr_printf(" \n *  /\\ * Run GSM v0.3.8 Build: N/A Date: 01.14.2016");
-				scr_printf(" \n * SQU * Run SNESStation v0.2.6c Build: N/A Date: 11.22.2016");
+				scr_printf(" \n *  X * Run wLaunchElf v4.43a Build: 8d4a0c2 Date: 03.30.2019");
+				scr_printf(" \n *  O * Run OPL Open PS2 Loader v0.9.3 r1650 Build: 23e844a Date: 12.04.2019");
+				scr_printf(" \n * /\\ * Run GSM v0.3.8 Build: N/A Date: 01.14.2016");
+				scr_printf(" \n * [] * Run SNESStation v0.2.6c Build: N/A Date: 11.22.2016");
 				scr_printf(" \n * L1 * Run RetroArch 2048 v1.8.1 Build: bfdc8e6 Date: 11.15.2019");
 				scr_printf(" \n * L2 * Run RetroArch FCEUmm v1.8.1 Build: bfdc8e6 Date: 11.15.2019");		
 				scr_printf(" \n * L3 * Run RetroArch mGBA v1.8.1 Build: bfdc8e6 Date: 11.15.2019");

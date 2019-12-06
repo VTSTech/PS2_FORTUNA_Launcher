@@ -1,7 +1,9 @@
 # PS2_FORTUNA_Launcher
  PS2 FORTUNA Homebrew Launcher
 
-<img src="https://i.gyazo.com/aa90237b2df67fad89eb3f3d4380eddf.png">
+<img src="https://i.gyazo.com/ff6128abdace0d4dcb027e58326cca41.png">
+
+<img src="https://i.gyazo.com/b65197ff89ed315e617fe78fa3e95bc2.png">
 
 In case anyone missed it, There is a new PS2 Exploit by krat0s https://www.ps2-home.com/forum/viewtopic.php?f=107&t=8542
 
@@ -11,7 +13,7 @@ Rename FORTUNA_Launcher.elf to BOOT.ELF and copy to your mc0:/FORTUNA/ folder
 
 PSX-Place FORTUNA Launcher Release Thread https://www.psx-place.com/threads/fortuna-launcher-by-vtstech-boot-elf-replacement.27254/
 
-It can use the following paths (updated v0.3):
+It can use the following paths:
 
 <pre>
 
@@ -84,6 +86,10 @@ mass:/APPS/PS2Ident.elf
 
 Changelog  
 <pre>
+v0.41
+Correct release date of OPL
+Minor text display adjustments
+
 v0.4
 Minor code cleanup
 Removed few debug messages
