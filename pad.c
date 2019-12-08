@@ -11,6 +11,7 @@ u32 old_pad = 0, old_pad_t[2] = {0, 0};
 u32 new_pad, new_pad_t[2];
 u32 joy_value = 0;
 static int test_joy = 0;
+u64 Timer(void);
 
 //---------------------------------------------------------------------------
 // read PAD, without KB, and allow no auto-repeat. This is needed in code

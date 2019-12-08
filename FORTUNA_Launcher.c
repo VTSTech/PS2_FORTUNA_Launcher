@@ -1,6 +1,6 @@
 //Working Title: 'FORTUNA' Homebrew Launcher
 //Written by VTSTech (veritas@vts-tech.org)
-//Version: 0.41
+//Version: 0.42
 
 #include <debug.h>
 #include <iopcontrol.h>
@@ -22,31 +22,19 @@ u64 Timer(void)
 {
 	return (clock() / (CLOCKS_PER_SEC / 1000));
 }
-static int resetiop = 0;
 
-//** Function ResetIOP() from main.c MPLUS-LOADER3.ELF
-//** http://lukasz.dk/2008/04/22/datel-memory-plus-64-mb/
+//thx sp193
 void ResetIOP()
 {
-	if(resetiop)
-	{
-		fioExit();
-		SifExitIopHeap();
-		SifLoadFileExit();
-		SifExitRpc();
-	}
-
-	SifIopReset("rom0:UDNL rom0:EELOADCNF", 0);
-    
-	while (SifIopSync()) ;
-
-	resetiop = 1;
-
+	SifInitRpc(0);
+	while(!SifIopReset("", 0)){};
+	while(!SifIopSync()){};
 	SifInitRpc(0);
 }
 
 //** Function LoadElf() from main.c MPLUS-LOADER3.ELF
 //** http://lukasz.dk/2008/04/22/datel-memory-plus-64-mb/
+//slightly modified
 void LoadElf(const char *elf, char* path)
 {
 	char* args[1];
@@ -60,8 +48,8 @@ void LoadElf(const char *elf, char* path)
 
 	if(exec.epc > 0)
 	{	
-		FlushCache(0);
-		FlushCache(2);
+		//FlushCache(0);
+		//FlushCache(2);
 
 		// Reset IOP, since not all ELF's do it and we've loaded additional IOP
 		// modules which need to be unloaded
@@ -82,7 +70,7 @@ void LoadElf(const char *elf, char* path)
 extern u64 WaitTime;
 extern u64 CurrTime;
 
-u64 Timer(void);
+
 
 u64 WaitTime;
 u64 CurrTime;
@@ -94,8 +82,8 @@ void banner()
 	scr_clear();
   sleep(1);
   scr_printf("============================================= \n");
-  scr_printf("==FORTUNA Homebrew Launcher===12.06.2019===== \n");
-  scr_printf("==v0.41 Written by VTSTech of PSX-Place.com== \n");
+  scr_printf("==FORTUNA Homebrew Launcher===12.08.2019===== \n");
+  scr_printf("==v0.42 Written by VTSTech of PSX-Place.com== \n");
   scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
   scr_printf("==www.vts-tech.org=========================== \n\n");	
 }
@@ -105,25 +93,32 @@ int main(int argc, char *argv[], char **envp)
 	char *target, *path;
 	char device[50];
 	char folder[50];
- 	SifInitRpc(0);
-	init_scr();
-	banner();
-	SifLoadModule("rom0:SIO2MAN", 0, NULL);
-	SifLoadModule("rom0:MCMAN", 0, NULL);
-	SifLoadModule("rom0:MCSERV", 0, NULL);
-	SifLoadModule("rom0:PADMAN", 0, NULL);
-	sbv_patch_disable_prefix_check();
-	path="";
-	strcpy(device,"mc0:");
-	strcpy(folder,"/FORTUNA/");
-	setupPad();
-	WaitTime = Timer();
-	int state = padGetState(0,0);
 	int CdStatus;
 	int devshown = 0;
 	int devset = 0;
 	int menushown = 0;
+	init_scr();
+	ResetIOP();
+	SifInitIopHeap();
+	SifLoadFileInit();
+	fioInit();
+	//wipeUserMem();
+	sbv_patch_disable_prefix_check();
+	SifLoadModule("rom0:SIO2MAN", 0, NULL);
+	SifLoadModule("rom0:MCMAN", 0, NULL);
+	SifLoadModule("rom0:MCSERV", 0, NULL);
+	SifLoadModule("rom0:PADMAN", 0, NULL);
+	sceCdInit(SCECdINoD);
+	//cdInitAdd();
+	banner();
+	path="";
+	strcpy(device,"mc0:");
+	strcpy(folder,"/FORTUNA/");
+	setupPad();
 	sleep(1);
+	int state = padGetState(0,0);
+	//WaitTime = Timer();
+	CdStatus = sceCdStatus();
 	if (state == 6) {
 		//SEL = 1
 		//L3  = 2
@@ -141,8 +136,6 @@ int main(int argc, char *argv[], char **envp)
 		// O  = 8192
 		// X  = 16384
 		//[ ] = 32768
-		sceCdInit(SCECdINoD);
-	  CdStatus = sceCdStatus();
 		while(1) {
 			//int state;
 			state = readpad();
@@ -152,6 +145,7 @@ int main(int argc, char *argv[], char **envp)
 				scr_printf(" \n *  O * Use Device: mass and Folder: FORTUNA \n");
 				scr_printf(" \n * /\\ * Use Device: mc0 and Folder: APPS \n");
 				scr_printf(" \n * [] * Use Device: mass and Folder: APPS \n");
+				scr_printf(" \n * SEL * Launch FMCB from mc1 \n");
 				devshown = 1;
 			}							
 			if (state != 1) {
@@ -162,7 +156,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"snes_emu.elf");
-						scr_printf(" \nPreparing to run SNESStation v0.2.6c (%s) ... \n", target);
+						scr_printf(" \nPreparing to run SNESStation (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);					
 					} else if (new_pad == 16384) {
@@ -170,7 +164,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"WLE.ELF");
-						scr_printf(" \nPreparing to run wLaunchElf v4.43a (%s) ... \n", target);
+						scr_printf(" \nPreparing to run wLaunchElf (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 8192) {
@@ -178,7 +172,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"OPL.ELF");
-						scr_printf(" \nPreparing to run OPL Open PS2 Loader v0.9.3 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run OPL Open PS2 Loader (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 4096) {
@@ -186,7 +180,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"GSM.ELF");
-						scr_printf(" \nPreparing to run GSM v0.3.8 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run GSM (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 2048) {
@@ -194,7 +188,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"retroarchps2_picodrive.elf");
-						scr_printf(" \nPreparing to run RetroArch PicoDrive Core v1.8.1 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run RetroArch PicoDrive Core (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 1024) {
@@ -202,7 +196,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"retroarchps2_2048.elf");
-						scr_printf(" \nPreparing to run RetroArch 2048 Core v1.8.1 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run RetroArch 2048 Core (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 512) {
@@ -210,7 +204,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"retroarchps2_quicknes.elf");
-						scr_printf(" \nPreparing to run RetroArch QuickNES Core v1.8.1 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run RetroArch QuickNES Core (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 256) {
@@ -218,7 +212,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"retroarchps2_fceumm.elf");
-						scr_printf(" \nPreparing to run RetroArch FCEUmm Core v1.8.1 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run RetroArch FCEUmm Core (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 16) {
@@ -226,7 +220,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"ESR.ELF");
-						scr_printf(" \nPreparing to run ESR r9b (%s) ... \n", target);
+						scr_printf(" \nPreparing to run ESR (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
 					} else if (new_pad == 8) {
@@ -242,7 +236,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"PS2Ident.elf");
-						scr_printf(" \nPreparing to run PS2Ident v0.835 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run PS2Ident (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);					
 					} else if (new_pad == 2) {
@@ -250,7 +244,7 @@ int main(int argc, char *argv[], char **envp)
 						strcat(target,folder);
 						path = target;
 						strcat(target,"retroarchps2_mgba.elf");
-						scr_printf(" \nPreparing to run RetroArch mGBA Core v1.8.1 (%s) ... \n", target);
+						scr_printf(" \nPreparing to run RetroArch mGBA Core (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);										
 					}
@@ -259,17 +253,17 @@ int main(int argc, char *argv[], char **envp)
 			if (menushown == 0 && devset == 1) {
 				banner();
 				scr_printf("Device: %s Folder: %s \n", device, folder);
-				scr_printf(" \n *  X * Run wLaunchElf v4.43a Build: 8d4a0c2 Date: 03.30.2019");
-				scr_printf(" \n *  O * Run OPL Open PS2 Loader v0.9.3 r1650 Build: 23e844a Date: 12.04.2019");
-				scr_printf(" \n * /\\ * Run GSM v0.3.8 Build: N/A Date: 01.14.2016");
-				scr_printf(" \n * [] * Run SNESStation v0.2.6c Build: N/A Date: 11.22.2016");
-				scr_printf(" \n * L1 * Run RetroArch 2048 v1.8.1 Build: bfdc8e6 Date: 11.15.2019");
-				scr_printf(" \n * L2 * Run RetroArch FCEUmm v1.8.1 Build: bfdc8e6 Date: 11.15.2019");		
-				scr_printf(" \n * L3 * Run RetroArch mGBA v1.8.1 Build: bfdc8e6 Date: 11.15.2019");
-				scr_printf(" \n * R1 * Run RetroArch PicoDrive v1.8.1 Build: bfdc8e6 Date: 11.15.2019");		
-				scr_printf(" \n * R2 * Run RetroArch QuickNES v1.8.1 Build: bfdc8e6 Date: 11.15.2019");		
-				scr_printf(" \n * R3 * Run PS2Ident v0.835 Build: N/A Date: 11.08.2019");
-				scr_printf(" \n * UP * Run ESR r9b Build: N/A Date: 09.05.2008");
+				scr_printf(" \n *  X * Run wLaunchElf");
+				scr_printf(" \n *  O * Run OPL Open PS2 Loader");
+				scr_printf(" \n * /\\ * Run GSM");
+				scr_printf(" \n * [] * Run SNESStation");
+				scr_printf(" \n * L1 * Run RetroArch 2048");
+				scr_printf(" \n * L2 * Run RetroArch FCEUmm");		
+				scr_printf(" \n * L3 * Run RetroArch mGBA");
+				scr_printf(" \n * R1 * Run RetroArch PicoDrive");		
+				scr_printf(" \n * R2 * Run RetroArch QuickNES");		
+				scr_printf(" \n * R3 * Run PS2Ident");
+				scr_printf(" \n * UP * Run ESR");
 				scr_printf(" \n \nPush START to exit. \n");
 				//scr_printf(" \n \nController ready. Waiting for input... \n");
 				menushown = 1;
@@ -306,6 +300,24 @@ int main(int argc, char *argv[], char **envp)
 					sleep(1);
 					scr_printf("Device: %s Folder: %s \n", device, folder);			
 					devset = 1;
+				}	else if (new_pad == 1) {
+					strcpy(device,"mc1:");
+					strcpy(folder,"/BAEXEC-SYSTEM/");
+					scr_setXY(1,7);
+					sleep(1);
+					scr_printf("Device: %s Folder: %s \n", device, folder);			
+					target = device;
+					strcat(target,folder);
+					path = target;
+					strcat(target,"osdmain.elf");
+					char *args[3];
+					args[0] = "-m rom0:SIO2MAN";
+					args[1] = "-m rom0:MCMAN";
+					args[2] = "-x mc1:/BAEXEC-SYSTEM/osdmain.elf";
+					scr_printf("Preparing to launch FMCB KELF: %s \n", target);		
+					sleep(3);
+					LoadExecPS2("moduleload", 3, args);
+					devset = 0;					
 				}
 			}
 			//scr_printf("Debug: %d \n", devset);
