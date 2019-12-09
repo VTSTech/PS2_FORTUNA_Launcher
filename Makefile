@@ -1,5 +1,5 @@
 EE_BIN = FORTUNA_Launcher.elf
-EE_OBJS = FORTUNA_Launcher.o pad.o
+EE_OBJS = FORTUNA_Launcher.o pad.o OSDInit.o libcdvd_add.o
 EE_LIBS = -lc -lcdvd -lpatches -ldebug -lpad 
 
 all: $(EE_BIN)

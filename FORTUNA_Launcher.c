@@ -17,6 +17,8 @@
 #include <libcdvd.h>
 
 #include "FORTUNA_Launcher.h"
+#include "OSDInit.h"
+#include "libcdvd_add.h"
 
 u64 Timer(void)
 {
@@ -82,8 +84,8 @@ void banner()
 	scr_clear();
   sleep(1);
   scr_printf("============================================= \n");
-  scr_printf("==FORTUNA Homebrew Launcher===12.08.2019===== \n");
-  scr_printf("==v0.42 Written by VTSTech of PSX-Place.com== \n");
+  scr_printf("==FORTUNA Homebrew Launcher===12.09.2019===== \n");
+  scr_printf("==v0.43 Written by VTSTech of PSX-Place.com== \n");
   scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
   scr_printf("==www.vts-tech.org=========================== \n\n");	
 }
@@ -141,11 +143,12 @@ int main(int argc, char *argv[], char **envp)
 			state = readpad();
 			//CdStatus = sceCdStatus();
 			if (devshown == 0 && menushown == 0) {
-				scr_printf(" \n *  X * Use Device: mc0 and Folder: FORTUNA \n");
-				scr_printf(" \n *  O * Use Device: mass and Folder: FORTUNA \n");
-				scr_printf(" \n * /\\ * Use Device: mc0 and Folder: APPS \n");
-				scr_printf(" \n * [] * Use Device: mass and Folder: APPS \n");
-				scr_printf(" \n * SEL * Launch FMCB from mc1 \n");
+				scr_printf(" \n *  CROSS   * Use Device: mc0 and Folder: FORTUNA \n");
+				scr_printf(" \n *  CIRCLE  * Use Device: mass and Folder: FORTUNA \n");
+				scr_printf(" \n * TRIANGLE * Use Device: mc0 and Folder: APPS \n");
+				scr_printf(" \n *  SQUARE  * Use Device: mass and Folder: APPS \n");
+				scr_printf(" \n *  SELECT  * Launch FMCB from mc1 \n");
+				scr_printf(" \n *  START   * Launch FMCB from mc0 \n");
 				devshown = 1;
 			}							
 			if (state != 1) {
@@ -253,17 +256,17 @@ int main(int argc, char *argv[], char **envp)
 			if (menushown == 0 && devset == 1) {
 				banner();
 				scr_printf("Device: %s Folder: %s \n", device, folder);
-				scr_printf(" \n *  X * Run wLaunchElf");
-				scr_printf(" \n *  O * Run OPL Open PS2 Loader");
-				scr_printf(" \n * /\\ * Run GSM");
-				scr_printf(" \n * [] * Run SNESStation");
-				scr_printf(" \n * L1 * Run RetroArch 2048");
-				scr_printf(" \n * L2 * Run RetroArch FCEUmm");		
-				scr_printf(" \n * L3 * Run RetroArch mGBA");
-				scr_printf(" \n * R1 * Run RetroArch PicoDrive");		
-				scr_printf(" \n * R2 * Run RetroArch QuickNES");		
-				scr_printf(" \n * R3 * Run PS2Ident");
-				scr_printf(" \n * UP * Run ESR");
+				scr_printf(" \n *  CROSS   * Run wLaunchElf");
+				scr_printf(" \n *  CIRCLE  * Run OPL Open PS2 Loader");
+				scr_printf(" \n * TRIANGLE * Run GSM");
+				scr_printf(" \n *  SQUARE  * Run SNESStation");
+				scr_printf(" \n *    L1    * Run RetroArch 2048");
+				scr_printf(" \n *    L2    * Run RetroArch FCEUmm");		
+				scr_printf(" \n *    L3    * Run RetroArch mGBA");
+				scr_printf(" \n *    R1    * Run RetroArch PicoDrive");		
+				scr_printf(" \n *    R2    * Run RetroArch QuickNES");		
+				scr_printf(" \n *    R3    * Run PS2Ident");
+				scr_printf(" \n *    UP    * Run ESR");
 				scr_printf(" \n \nPush START to exit. \n");
 				//scr_printf(" \n \nController ready. Waiting for input... \n");
 				menushown = 1;
@@ -271,6 +274,7 @@ int main(int argc, char *argv[], char **envp)
 			if (devshown == 1 && devset == 0) {							
 				if (new_pad != 0) {
 					//scr_printf("Debug: %d \n", new_pad);
+					//scr_printf("Debug: %s \n", OSDGetSystemExecFolder());
 					}
 				if (new_pad == 16384) {
 					strcpy(device,"mc0:");
@@ -300,24 +304,42 @@ int main(int argc, char *argv[], char **envp)
 					sleep(1);
 					scr_printf("Device: %s Folder: %s \n", device, folder);			
 					devset = 1;
-				}	else if (new_pad == 1) {
-					strcpy(device,"mc1:");
-					strcpy(folder,"/BAEXEC-SYSTEM/");
+				}	else if (new_pad == 8) {
+					strcpy(device,"-x mc1:/");
+					strcpy(folder,OSDGetSystemExecFolder());
 					scr_setXY(1,7);
 					sleep(1);
-					scr_printf("Device: %s Folder: %s \n", device, folder);			
+					scr_printf("Device: %s Folder: %s           \n", device, folder);			
 					target = device;
 					strcat(target,folder);
 					path = target;
-					strcat(target,"osdmain.elf");
+					strcat(target,"/osdmain.elf");
 					char *args[3];
 					args[0] = "-m rom0:SIO2MAN";
 					args[1] = "-m rom0:MCMAN";
-					args[2] = "-x mc1:/BAEXEC-SYSTEM/osdmain.elf";
-					scr_printf("Preparing to launch FMCB KELF: %s \n", target);		
-					sleep(3);
+					args[2] = target;
+					scr_printf(" Preparing to launch FMCB: %s \n \n \n \n \n \n \n \n \n \n", target);		
+					sleep(2);
 					LoadExecPS2("moduleload", 3, args);
-					devset = 0;					
+					devset = 0;
+				}	else if (new_pad == 1) {
+					strcpy(device,"-x mc0:/");
+					strcpy(folder,OSDGetSystemExecFolder());
+					scr_setXY(1,7);
+					sleep(1);
+					scr_printf("Device: %s Folder: %s          \n", device, folder);			
+					target = device;
+					strcat(target,folder);
+					path = target;
+					strcat(target,"/osdmain.elf");
+					char *args[3];
+					args[0] = "-m rom0:SIO2MAN";
+					args[1] = "-m rom0:MCMAN";
+					args[2] = target;
+					scr_printf(" Preparing to launch FMCB: %s \n \n \n \n \n \n \n \n \n \n", target);		
+					sleep(2);
+					LoadExecPS2("moduleload", 3, args);
+					devset = 0;
 				}
 			}
 			//scr_printf("Debug: %d \n", devset);

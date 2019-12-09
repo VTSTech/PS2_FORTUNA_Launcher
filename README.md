@@ -1,9 +1,9 @@
 # PS2_FORTUNA_Launcher
  PS2 FORTUNA Homebrew Launcher
 
-<img src="https://i.gyazo.com/be7f423daeedb7a2d83fc193cdaa0ee6.png">
+<img src="https://i.gyazo.com/734bb7ef9da6d100b4a14573a22b08ab.png">
 
-<img src="https://i.gyazo.com/c2702db5219db8dc479ff7de82e06aaa.png">
+<img src="https://i.gyazo.com/6dda528a226f15a4a156b0625e206660.png">
 
 In case anyone missed it, There is a new PS2 Exploit by krat0s https://www.ps2-home.com/forum/viewtopic.php?f=107&t=8542
 
@@ -86,8 +86,13 @@ mass:/APPS/PS2Ident.elf
 
 Changelog  
 <pre>
+v0.43
+Changed button menu display
+Experimental FMCB Support mc0/mc1
+(Needs testing on non-FMCB compatible PS2)
+
 v0.42
-Experimental FMCB support
+Experimental FMCB support mc1
 Removed versions strings/release dates
 Code optmizations
 
