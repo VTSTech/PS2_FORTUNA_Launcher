@@ -305,7 +305,7 @@ int main(int argc, char *argv[], char **envp)
 					scr_printf("Device: %s Folder: %s \n", device, folder);			
 					devset = 1;
 				}	else if (new_pad == 8) {
-					strcpy(device,"-x mc1:/");
+					strcpy(device,"-x mc0:/");
 					strcpy(folder,OSDGetSystemExecFolder());
 					scr_setXY(1,7);
 					sleep(1);
@@ -323,7 +323,7 @@ int main(int argc, char *argv[], char **envp)
 					LoadExecPS2("moduleload", 3, args);
 					devset = 0;
 				}	else if (new_pad == 1) {
-					strcpy(device,"-x mc0:/");
+					strcpy(device,"-x mc1:/");
 					strcpy(folder,OSDGetSystemExecFolder());
 					scr_setXY(1,7);
 					sleep(1);
