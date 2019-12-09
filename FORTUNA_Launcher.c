@@ -121,6 +121,7 @@ int main(int argc, char *argv[], char **envp)
 	int state = padGetState(0,0);
 	//WaitTime = Timer();
 	CdStatus = sceCdStatus();
+	OSDInitSystemPaths();
 	if (state == 6) {
 		//SEL = 1
 		//L3  = 2
