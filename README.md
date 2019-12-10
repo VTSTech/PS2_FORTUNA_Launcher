@@ -90,6 +90,8 @@ v0.43
 Changed button menu display
 Experimental FMCB Support mc0/mc1
 (Needs testing on non-FMCB compatible PS2)
+pad.c/h from wLaunchElf 8d4a0c2 by AKuHAK and SP193
+libcdvd_add.c/h & OSDInit.c/h from PS2Ident v0.835 by l_Oliveira and SP193
 
 v0.42
 Experimental FMCB support mc1
