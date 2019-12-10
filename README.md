@@ -84,6 +84,14 @@ mass:/APPS/PS2Ident.elf
 </pre>
 
 
+Credits
+<pre>
+pad.c/h from wLaunchElf 8d4a0c2 by AKuHAK and SP193
+libcdvd_add.c/h & OSDInit.c/h from PS2Ident v0.835 by l_Oliveira and SP193
+FORTUNA Exploit by krat0s (not included, icon.icn & icon.sys)
+</pre>
+
+
 Changelog  
 <pre>
 v0.43
