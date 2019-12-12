@@ -1,11 +1,11 @@
 # PS2_FORTUNA_Launcher
- PS2 FORTUNA Homebrew Launcher
+ PS2 FORTUNA Homebrew Launcher (BOOT.ELF Replacement)
 
-<img src="https://i.gyazo.com/734bb7ef9da6d100b4a14573a22b08ab.png">
+<img src="https://i.gyazo.com/bfcfcc3553e1acf4571fe04d11861b62.png">
 
-<img src="https://i.gyazo.com/6dda528a226f15a4a156b0625e206660.png">
+<img src="https://i.gyazo.com/88f96bb98e2b658e04e735a502f7e533.png">
 
-In case anyone missed it, There is a new PS2 Exploit by krat0s https://www.ps2-home.com/forum/viewtopic.php?f=107&t=8542
+In case anyone missed it, There is a new exploit (PS2 FORTUNA Project) by krat0s https://www.ps2-home.com/forum/viewtopic.php?f=107&t=8542
 
 This is designed to work with that package/folder/savefile
 

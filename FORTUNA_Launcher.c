@@ -83,11 +83,11 @@ void banner()
 {
 	scr_clear();
   sleep(1);
-  scr_printf("============================================= \n");
-  scr_printf("==FORTUNA Homebrew Launcher===12.09.2019===== \n");
-  scr_printf("==v0.43 Written by VTSTech of PSX-Place.com== \n");
-  scr_printf("==FORTUNA Exploit by krat0s of PS2-Home.com== \n");
-  scr_printf("==www.vts-tech.org=========================== \n\n");	
+  scr_printf("============================================== \n");
+  scr_printf("=FORTUNA Homebrew Launcher v0.43===12-11-2019= \n");
+  scr_printf("=BOOT.ELF Written by VTSTech of PSX-Place.com= \n");
+  scr_printf("=FORTUNA Project by krat0s of PS2-Home.com==== \n");
+  scr_printf("=www.vts-tech.org============================= \n\n");	
 }
 
 int main(int argc, char *argv[], char **envp)
