@@ -88,7 +88,7 @@ Credits
 <pre>
 pad.c/h from wLaunchElf 8d4a0c2 by AKuHAK and SP193
 libcdvd_add.c/h & OSDInit.c/h from PS2Ident v0.835 by l_Oliveira and SP193
-FORTUNA Exploit by krat0s (not included, icon.icn & icon.sys)
+PS2 FORTUNA Project by krat0s (not included, icon.icn & icon.sys)
 Compiled with current PS2SDK as of Nov 2019
 Packed with PS2-Packer v1.1.0 by Nicolas "Pixel" Noble
 </pre>
