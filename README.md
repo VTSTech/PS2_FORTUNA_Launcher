@@ -1,9 +1,9 @@
 # PS2_FORTUNA_Launcher
  PS2 FORTUNA Homebrew Launcher (BOOT.ELF Replacement)
 
-<img src="https://i.gyazo.com/bfcfcc3553e1acf4571fe04d11861b62.png">
+<img src="https://i.gyazo.com/3b9865b4f0b328a3845a464220cccc3d.png">
 
-<img src="https://i.gyazo.com/88f96bb98e2b658e04e735a502f7e533.png">
+<img src="https://i.gyazo.com/a0703d048d3d77fd4ab8aa8fa5cc811d.png">
 
 In case anyone missed it, There is a new exploit (PS2 FORTUNA Project) by krat0s https://www.ps2-home.com/forum/viewtopic.php?f=107&t=8542
 
@@ -44,6 +44,13 @@ mc0:/FORTUNA/ESR.ELF
 mass:/FORTUNA/ESR.ELF
 mc0:/APPS/ESR.ELF
 mass:/APPS/ESR.ELF
+
+HDL
+
+mc0:/FORTUNA/HDL.ELF
+mass:/FORTUNA/HDL.ELF
+mc0:/APPS/HDL.ELF
+mass:/APPS/HDL.ELF
 
 RetroArch
 
@@ -96,6 +103,12 @@ Packed with PS2-Packer v1.1.0 by Nicolas "Pixel" Noble
 
 Changelog  
 <pre>
+v0.44
+Added support for HDLoader
+Added support for user specific CUSTOM1/2.ELF
+Removed a few 1s delays
+Code optimizations
+
 v0.43
 Changed button menu display
 Experimental FMCB Support mc0/mc1

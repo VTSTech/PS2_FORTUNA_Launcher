@@ -1,6 +1,6 @@
 //Working Title: 'FORTUNA' Homebrew Launcher
 //Written by VTSTech (veritas@vts-tech.org)
-//Version: 0.42
+//Version: 0.44
 
 #include <debug.h>
 #include <iopcontrol.h>
@@ -84,21 +84,14 @@ void banner()
 	scr_clear();
   sleep(1);
   scr_printf("============================================== \n");
-  scr_printf("=FORTUNA Homebrew Launcher v0.43===12-11-2019= \n");
+  scr_printf("=FORTUNA Homebrew Launcher v0.44===12-13-2019= \n");
   scr_printf("=BOOT.ELF Written by VTSTech of PSX-Place.com= \n");
   scr_printf("=FORTUNA Project by krat0s of PS2-Home.com==== \n");
   scr_printf("=www.vts-tech.org============================= \n\n");	
 }
 
-int main(int argc, char *argv[], char **envp)
+void InitPS2()
 {
-	char *target, *path;
-	char device[50];
-	char folder[50];
-	int CdStatus;
-	int devshown = 0;
-	int devset = 0;
-	int menushown = 0;
 	init_scr();
 	ResetIOP();
 	SifInitIopHeap();
@@ -112,6 +105,19 @@ int main(int argc, char *argv[], char **envp)
 	SifLoadModule("rom0:PADMAN", 0, NULL);
 	sceCdInit(SCECdINoD);
 	//cdInitAdd();
+	sleep(1);
+}
+
+int main(int argc, char *argv[], char **envp)
+{
+	char *target, *path;
+	char device[50];
+	char folder[50];
+	int CdStatus;
+	int devshown = 0;
+	int devset = 0;
+	int menushown = 0;
+	InitPS2();
 	banner();
 	path="";
 	strcpy(device,"mc0:");
@@ -123,22 +129,6 @@ int main(int argc, char *argv[], char **envp)
 	CdStatus = sceCdStatus();
 	OSDInitSystemPaths();
 	if (state == 6) {
-		//SEL = 1
-		//L3  = 2
-		//R3  = 4
-		//STR = 8
-		//UP  = 16
-		//RGT = 32
-		//DWN = 64
-		//LFT = 128
-		//L2  = 256
-		//R2  = 512
-		//L1  = 1024
-		//R1  = 2048
-		// /\ = 4096
-		// O  = 8192
-		// X  = 16384
-		//[ ] = 32768
 		while(1) {
 			//int state;
 			state = readpad();
@@ -219,6 +209,30 @@ int main(int argc, char *argv[], char **envp)
 						scr_printf(" \nPreparing to run RetroArch FCEUmm Core (%s) ... \n", target);
 						sleep(1);
 						LoadElf(target,path);
+					} else if (new_pad == 128) {
+						target = device;
+						strcat(target,folder);
+						path = target;
+						strcat(target,"CUSTOM1.ELF");
+						scr_printf(" \nPreparing to run CUSTOM1 (%s) ... \n", target);
+						sleep(1);
+						LoadElf(target,path);
+					} else if (new_pad == 64) {
+						target = device;
+						strcat(target,folder);
+						path = target;
+						strcat(target,"HDL.ELF");
+						scr_printf(" \nPreparing to run HDL (%s) ... \n", target);
+						sleep(1);
+						LoadElf(target,path);
+					} else if (new_pad == 32) {
+						target = device;
+						strcat(target,folder);
+						path = target;
+						strcat(target,"CUSTOM2.ELF");
+						scr_printf(" \nPreparing to run CUSTOM2 (%s) ... \n", target);
+						sleep(1);
+						LoadElf(target,path);
 					} else if (new_pad == 16) {
 						target = device;
 						strcat(target,folder);
@@ -253,11 +267,27 @@ int main(int argc, char *argv[], char **envp)
 						LoadElf(target,path);										
 					}
 				} //devshown,devset,menushown							 
-			}// state,cdstatus										
+			}// state,cdstatus									
+		//SEL = 1
+		//L3  = 2
+		//R3  = 4
+		//STR = 8
+		//UP  = 16
+		//RGT = 32
+		//DWN = 64
+		//LFT = 128
+		//L2  = 256
+		//R2  = 512
+		//L1  = 1024
+		//R1  = 2048
+		// /\ = 4096
+		// O  = 8192
+		// X  = 16384
+		//[ ] = 32768				
 			if (menushown == 0 && devset == 1) {
 				banner();
 				scr_printf("Device: %s Folder: %s \n", device, folder);
-				scr_printf(" \n *  CROSS   * Run wLaunchElf");
+				scr_printf(" \n *   CROSS  * Run wLaunchElf");
 				scr_printf(" \n *  CIRCLE  * Run OPL Open PS2 Loader");
 				scr_printf(" \n * TRIANGLE * Run GSM");
 				scr_printf(" \n *  SQUARE  * Run SNESStation");
@@ -268,6 +298,9 @@ int main(int argc, char *argv[], char **envp)
 				scr_printf(" \n *    R2    * Run RetroArch QuickNES");		
 				scr_printf(" \n *    R3    * Run PS2Ident");
 				scr_printf(" \n *    UP    * Run ESR");
+				scr_printf(" \n *   DOWN   * Run HDL");
+				scr_printf(" \n *   LEFT   * Run CUSTOM1.ELF");
+				scr_printf(" \n *   RIGHT  * Run CUSTOM2.ELF");
 				scr_printf(" \n \nPush START to exit. \n");
 				//scr_printf(" \n \nController ready. Waiting for input... \n");
 				menushown = 1;
@@ -281,35 +314,30 @@ int main(int argc, char *argv[], char **envp)
 					strcpy(device,"mc0:");
 					strcpy(folder,"/FORTUNA/");							
 					scr_setXY(1,7);
-					sleep(1);
 					scr_printf("Device: %s Folder: %s \n", device, folder);
 					devset = 1;		
 				}	else if (new_pad == 8192) {
 					strcpy(device,"mass:");
 					strcpy(folder,"/FORTUNA/");								
 					scr_setXY(1,7);
-					sleep(1);
 					scr_printf("Device: %s Folder: %s \n", device, folder);				
 					devset = 1;
 				}	else if (new_pad == 4096) {
 					strcpy(device,"mc0:");
 					strcpy(folder,"/APPS/");							
 					scr_setXY(1,7);
-					sleep(1);
 					scr_printf("Device: %s Folder: %s \n", device, folder);			
 					devset = 1;
 				}	else if (new_pad == 32768) {
 					strcpy(device,"mass:");
 					strcpy(folder,"/APPS/");							
 					scr_setXY(1,7);
-					sleep(1);
 					scr_printf("Device: %s Folder: %s \n", device, folder);			
 					devset = 1;
 				}	else if (new_pad == 8) {
 					strcpy(device,"-x mc0:/");
 					strcpy(folder,OSDGetSystemExecFolder());
 					scr_setXY(1,7);
-					sleep(1);
 					scr_printf("Device: %s Folder: %s           \n", device, folder);			
 					target = device;
 					strcat(target,folder);
@@ -327,7 +355,6 @@ int main(int argc, char *argv[], char **envp)
 					strcpy(device,"-x mc1:/");
 					strcpy(folder,OSDGetSystemExecFolder());
 					scr_setXY(1,7);
-					sleep(1);
 					scr_printf("Device: %s Folder: %s          \n", device, folder);			
 					target = device;
 					strcat(target,folder);
