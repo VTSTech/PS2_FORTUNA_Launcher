@@ -9,7 +9,7 @@ In case anyone missed it, There is a new exploit (PS2 FORTUNA Project) by krat0s
 
 This is designed to work with that package/folder/savefile
 
-Rename FORTUNA_Launcher.elf to BOOT.ELF and copy to your mc0:/FORTUNA/ folder
+Rename FORTUNA_Launcher.elf (or BOOT-packed.ELF) to BOOT.ELF and <b>copy BOOT.ELF, usbd.irx & usbhdfsd.irx to your mc0:/FORTUNA/ folder</b>
 
 PSX-Place FORTUNA Launcher Release Thread https://www.psx-place.com/threads/fortuna-launcher-by-vtstech-boot-elf-replacement.27254/
 
@@ -97,12 +97,23 @@ pad.c/h from wLaunchElf 8d4a0c2 by AKuHAK and SP193
 libcdvd_add.c/h & OSDInit.c/h from PS2Ident v0.835 by l_Oliveira and SP193
 PS2 FORTUNA Project by krat0s (not included, icon.icn & icon.sys)
 Compiled with current PS2SDK as of Nov 2019
+usbd.irx & usbhdfsd.irx from /ps2dev/ps2sdk/iop/irx/ as of Nov 2019
 Packed with PS2-Packer v1.1.0 by Nicolas "Pixel" Noble
 </pre>
 
 
 Changelog  
 <pre>
+v0.45
+Now loading, referencing and including:
+
+/ps2dev/ps2sdk/iop/irx/usbd.irx
+/ps2dev/ps2sdk/iop/irx/usbhdfsd.irx
+
+Fixes red screen when using USB.
+
+Must be in mc0:/FORTUNA/ for now
+
 v0.44
 Added support for HDLoader
 Added support for user specific CUSTOM1/2.ELF
