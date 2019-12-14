@@ -84,7 +84,7 @@ void banner()
 	scr_clear();
   sleep(1);
   scr_printf("============================================== \n");
-  scr_printf("=FORTUNA Homebrew Launcher v0.44===12-13-2019= \n");
+  scr_printf("=FORTUNA Homebrew Launcher v0.45===12-14-2019= \n");
   scr_printf("=BOOT.ELF Written by VTSTech of PSX-Place.com= \n");
   scr_printf("=FORTUNA Project by krat0s of PS2-Home.com==== \n");
   scr_printf("=www.vts-tech.org============================= \n\n");	
@@ -118,6 +118,11 @@ int main(int argc, char *argv[], char **envp)
 	int devset = 0;
 	int menushown = 0;
 	InitPS2();
+	//IRX from:
+	//./usr/local/ps2dev/ps2sdk/iop/irx/usbd.irx
+	//./usr/local/ps2dev/ps2sdk/iop/irx/usbhdfsd.irx
+	SifLoadModule("mc0:/FORTUNA/usbd.irx", 0, NULL);
+	SifLoadModule("mc0:/FORTUNA/usbhdfsd.irx", 0, NULL);	
 	banner();
 	path="";
 	strcpy(device,"mc0:");
