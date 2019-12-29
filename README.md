@@ -1,9 +1,9 @@
 # PS2_FORTUNA_Launcher
  PS2 FORTUNA Homebrew Launcher (BOOT.ELF Replacement)
 
-<img src="https://i.gyazo.com/3d18d92f3cb2998af63af640832a6387.png">
+<img src="https://i.gyazo.com/8cccf051a9ca6ac67f559b6413427e2b.png">
 
-<img src="https://i.gyazo.com/85375f4b173ad587212330632879bed6.png">
+<img src="https://i.gyazo.com/cca78c214f00f870715913dab259f4ee.png">
 
 In case anyone missed it, There is a new exploit (PS2 FORTUNA Project) by krat0s https://www.ps2-home.com/forum/viewtopic.php?f=107&t=8542
 
@@ -12,6 +12,8 @@ This is designed to work with that package/folder/savefile
 Rename FORTUNA_Launcher.elf (or BOOT-packed.ELF) to BOOT.ELF and <b>copy BOOT.ELF, usbd.irx & usbhdfsd.irx to your mc0:/FORTUNA/ folder</b>
 
 PSX-Place FORTUNA Launcher Release Thread https://www.psx-place.com/threads/fortuna-launcher-by-vtstech-boot-elf-replacement.27254/
+
+Demo: https://www.youtube.com/watch?v=bbVLOnL8_W8
 
 It can use the following paths:
 
@@ -94,7 +96,7 @@ mass:/APPS/PS2Ident.elf
 Credits
 <pre>
 pad.c/h from wLaunchElf 8d4a0c2 by AKuHAK and SP193
-libcdvd_add.c/h & OSDInit.c/h from PS2Ident v0.835 by l_Oliveira and SP193
+Uses OSDInit.c/h & libcdvd_add.c/h from 'OSD Initialization Libraries' by SP193
 PS2 FORTUNA Project by krat0s (not included, icon.icn & icon.sys)
 Compiled with current PS2SDK as of Nov 2019
 usbd.irx & usbhdfsd.irx from /ps2dev/ps2sdk/iop/irx/ as of Nov 2019
