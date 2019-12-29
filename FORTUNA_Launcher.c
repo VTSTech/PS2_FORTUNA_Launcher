@@ -1,6 +1,6 @@
 //Working Title: 'FORTUNA' Homebrew Launcher
 //Written by VTSTech (veritas@vts-tech.org)
-//Version: 0.44
+//Version: 0.46
 
 #include <debug.h>
 #include <iopcontrol.h>
@@ -84,7 +84,7 @@ void banner()
 	scr_clear();
   sleep(1);
   scr_printf("============================================== \n");
-  scr_printf("=FORTUNA Homebrew Launcher v0.45===12-14-2019= \n");
+  scr_printf("=FORTUNA Homebrew Launcher v0.46===12-29-2019= \n");
   scr_printf("=BOOT.ELF Written by VTSTech of PSX-Place.com= \n");
   scr_printf("=FORTUNA Project by krat0s of PS2-Home.com==== \n");
   scr_printf("=www.vts-tech.org============================= \n\n");	
@@ -108,6 +108,12 @@ void InitPS2()
 	sleep(1);
 }
 
+int getFileSize(int fd) {
+	int size = fioLseek(fd, 0, SEEK_END);
+	fioLseek(fd, 0, SEEK_SET);
+	return size;
+}
+
 int main(int argc, char *argv[], char **envp)
 {
 	char *target, *path;
@@ -117,6 +123,10 @@ int main(int argc, char *argv[], char **envp)
 	int devshown = 0;
 	int devset = 0;
 	int menushown = 0;
+	int fd = 0;
+	int FORTUNA = 0;
+	int MC0T = 0;
+	int MC1T = 0;
 	InitPS2();
 	//IRX from:
 	//./usr/local/ps2dev/ps2sdk/iop/irx/usbd.irx
@@ -125,8 +135,6 @@ int main(int argc, char *argv[], char **envp)
 	SifLoadModule("mc0:/FORTUNA/usbhdfsd.irx", 0, NULL);	
 	banner();
 	path="";
-	strcpy(device,"mc0:");
-	strcpy(folder,"/FORTUNA/");
 	setupPad();
 	sleep(1);
 	int state = padGetState(0,0);
@@ -139,16 +147,50 @@ int main(int argc, char *argv[], char **envp)
 			state = readpad();
 			//CdStatus = sceCdStatus();
 			if (devshown == 0 && menushown == 0) {
+				fioClose(fd);
+				fd = fioOpen("mc0:/FORTUNA/icon.icn", O_RDONLY);
+				if (getFileSize(fd) == 51040){
+					scr_printf(" FORTUNA rev1 detected on mc0! (Newer version available) \n");
+					FORTUNA = 1;
+					MC0T = 1;
+					strcpy(device,"mc0:");
+					strcpy(folder,"/FORTUNA/");
+				} else if (getFileSize(fd) == 16876){
+					scr_printf(" FORTUNA rev2 detected on mc0! \n");
+					FORTUNA = 1;
+					MC0T = 1;
+					strcpy(device,"mc0:");
+					strcpy(folder,"/FORTUNA/");					
+				}
+				fioClose(fd);
+				fd = fioOpen("mc1:/FORTUNA/icon.icn", O_RDONLY);
+				if (getFileSize(fd) == 51040){
+					scr_printf(" FORTUNA rev1 detected on mc1! (Newer version available) \n");
+					FORTUNA = 1;
+					MC1T = 1;
+					strcpy(device,"mc1:");
+					strcpy(folder,"/FORTUNA/");					
+				} else if (getFileSize(fd) == 16876){
+					scr_printf(" FORTUNA rev2 detected on mc1! \n");
+					FORTUNA = 1;
+					MC1T = 1;
+					strcpy(device,"mc1:");
+					strcpy(folder,"/FORTUNA/");					
+				}
+				fioClose(fd);
 				scr_printf(" \n *  CROSS   * Use Device: mc0 and Folder: FORTUNA \n");
 				scr_printf(" \n *  CIRCLE  * Use Device: mass and Folder: FORTUNA \n");
 				scr_printf(" \n * TRIANGLE * Use Device: mc0 and Folder: APPS \n");
 				scr_printf(" \n *  SQUARE  * Use Device: mass and Folder: APPS \n");
-				scr_printf(" \n *  SELECT  * Launch FMCB from mc1 \n");
-				scr_printf(" \n *  START   * Launch FMCB from mc0 \n");
+				scr_printf(" \n *    L1    * Use Device: mc1 and Folder: FORTUNA \n");
+				scr_printf(" \n *    R1    * Use Device: mc1 and Folder: APPS \n");
+				scr_printf(" \n *  SELECT  * Launch FMCB from mc0 \n");
+				scr_printf(" \n *  START   * Launch FMCB from mc1 \n");
 				devshown = 1;
 			}							
 			if (state != 1) {
 				//scr_printf("Debug: %d \n",state);
+				//scr_printf("Debug: %d \n", new_pad);
 				if (menushown == 1 && devshown == 1 && devset == 1) {
 					if (new_pad == 32768) {
 						target = device;
@@ -339,37 +381,53 @@ int main(int argc, char *argv[], char **envp)
 					scr_setXY(1,7);
 					scr_printf("Device: %s Folder: %s \n", device, folder);			
 					devset = 1;
-				}	else if (new_pad == 8) {
-					strcpy(device,"-x mc0:/");
-					strcpy(folder,OSDGetSystemExecFolder());
+				}	else if (new_pad == 1024) {
+					strcpy(device,"mc1:");
+					strcpy(folder,"/FORTUNA/");								
 					scr_setXY(1,7);
-					scr_printf("Device: %s Folder: %s           \n", device, folder);			
+					scr_printf("Device: %s Folder: %s \n", device, folder);				
+					devset = 1;
+				}	else if (new_pad == 2048) {
+					strcpy(device,"mc1:");
+					strcpy(folder,"/APPS/");								
+					scr_setXY(1,7);
+					scr_printf("Device: %s Folder: %s \n", device, folder);				
+					devset = 1;
+				}	else if (new_pad == 1) {
+					//not sure how, but device names appear to be backwards. Only for LoadExecPS2(), Not ExecPS2()
+					//specify mc1: get FMCB menu from mc0, speciy mc0: get FMCB menu from mc1
+					strncpy(device,"-x mc1:/",8);
+					strncpy(folder,OSDGetSystemExecFolder(),13);
+					scr_setXY(1,7);
+					//scr_printf("Device: %s Folder: %s           \n", device, folder);			
 					target = device;
-					strcat(target,folder);
+					strncat(target,folder,13);
 					path = target;
-					strcat(target,"/osdmain.elf");
+					strncat(target,"/osdmain.elf",12);
 					char *args[3];
 					args[0] = "-m rom0:SIO2MAN";
 					args[1] = "-m rom0:MCMAN";
 					args[2] = target;
-					scr_printf(" Preparing to launch FMCB: %s \n \n \n \n \n \n \n \n \n \n", target);		
+					scr_printf(" \n Preparing to launch FMCB from Memory Card Slot 1 (mc0:) \n \n \n \n \n \n \n \n \n \n \n \n \n \n");		
 					sleep(2);
 					LoadExecPS2("moduleload", 3, args);
 					devset = 0;
-				}	else if (new_pad == 1) {
-					strcpy(device,"-x mc1:/");
-					strcpy(folder,OSDGetSystemExecFolder());
+				}	else if (new_pad == 8) {
+					//not sure how, but device names appear to be backwards. Only for LoadExecPS2(), Not ExecPS2()
+					//specify mc1: get FMCB menu from mc0, speciy mc0: get FMCB menu from mc1
+					strncpy(device,"-x mc0:/",8);
+					strncpy(folder,OSDGetSystemExecFolder(),13);
 					scr_setXY(1,7);
-					scr_printf("Device: %s Folder: %s          \n", device, folder);			
+					//scr_printf("Device: %s Folder: %s          \n", device, folder);			
 					target = device;
-					strcat(target,folder);
+					strncat(target,folder,13);
 					path = target;
-					strcat(target,"/osdmain.elf");
+					strncat(target,"/osdmain.elf",12);
 					char *args[3];
 					args[0] = "-m rom0:SIO2MAN";
 					args[1] = "-m rom0:MCMAN";
 					args[2] = target;
-					scr_printf(" Preparing to launch FMCB: %s \n \n \n \n \n \n \n \n \n \n", target);		
+					scr_printf(" \n Preparing to launch FMCB from Memory Card Slot 2 (mc1:) \n \n \n \n \n \n \n \n \n \n \n \n \n \n");		
 					sleep(2);
 					LoadExecPS2("moduleload", 3, args);
 					devset = 0;
